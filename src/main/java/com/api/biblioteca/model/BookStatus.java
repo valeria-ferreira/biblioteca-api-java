@@ -1,5 +1,6 @@
 package com.api.biblioteca.model;
 
-public class BookStatus {
-
+public enum BookStatus {
+    AVAILABLE,
+    BORROWED
 }
