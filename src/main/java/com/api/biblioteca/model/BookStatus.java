@@ -1,5 +1,5 @@
 package com.api.biblioteca.model;
 
-public @interface Entity {
+public class BookStatus {
 
 }
