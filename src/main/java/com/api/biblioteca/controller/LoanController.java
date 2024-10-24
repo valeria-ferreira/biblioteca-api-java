@@ -1,12 +1,20 @@
 package com.api.biblioteca.controller;
 
-import com.api.biblioteca.model.Loan;
-import com.api.biblioteca.repository.LoanRepository;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.api.biblioteca.model.Loan;
+import com.api.biblioteca.repository.LoanRepository;
 
 @RestController
 @RequestMapping("/loans")
@@ -45,12 +53,13 @@ public class LoanController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLoan(@PathVariable Long id) {
-        return loanRepository.findById(id)
-                .map(loan -> {
-                    loanRepository.delete(loan);
-                    return ResponseEntity.noContent().build();
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
+public ResponseEntity<Void> deleteLoan(@PathVariable Long id) {
+    return loanRepository.findById(id)
+            .map(loan -> {
+                loanRepository.delete(loan);
+                return ResponseEntity.noContent().<Void>build(); // Explicitamente define o tipo
+            })
+            .orElse(ResponseEntity.notFound().build());
+}
+
 }
