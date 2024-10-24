@@ -57,7 +57,7 @@ public ResponseEntity<Void> deleteLoan(@PathVariable Long id) {
     return loanRepository.findById(id)
             .map(loan -> {
                 loanRepository.delete(loan);
-                return ResponseEntity.noContent().<Void>build(); // Explicitamente define o tipo
+                return ResponseEntity.noContent().<Void>build();
             })
             .orElse(ResponseEntity.notFound().build());
 }
