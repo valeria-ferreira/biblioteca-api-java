@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 14-Out-2024 às 00:53
+-- Tempo de geração: 04-Nov-2024 às 02:24
 -- Versão do servidor: 10.4.27-MariaDB
 -- versão do PHP: 8.2.0
 
@@ -28,12 +28,12 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `books` (
-  `id` bigint(20) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `author` varchar(100) NOT NULL,
+  `id` int(11) NOT NULL,
+  `titulo` varchar(255) NOT NULL,
+  `autor` varchar(100) NOT NULL,
   `isbn` varchar(20) NOT NULL,
-  `publishedDate` date DEFAULT NULL,
-  `status` enum('AVAILABLE','BORROWED') NOT NULL DEFAULT 'AVAILABLE'
+  `data_publicacao` date DEFAULT NULL,
+  `status` enum('DISPONIVEL','EMPRESTADO') NOT NULL DEFAULT 'DISPONIVEL'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -43,14 +43,14 @@ CREATE TABLE `books` (
 --
 
 CREATE TABLE `customers` (
-  `id` bigint(20) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `lastname` varchar(100) NOT NULL,
-  `address` varchar(255) DEFAULT NULL,
-  `city` varchar(100) DEFAULT NULL,
-  `state` varchar(100) DEFAULT NULL,
-  `country` varchar(100) DEFAULT NULL,
-  `birthDate` date DEFAULT NULL
+  `id` int(11) NOT NULL,
+  `nome` varchar(100) NOT NULL,
+  `sobrenome` varchar(100) NOT NULL,
+  `endereco` varchar(255) DEFAULT NULL,
+  `cidade` varchar(100) DEFAULT NULL,
+  `estado` varchar(100) DEFAULT NULL,
+  `pais` varchar(100) DEFAULT NULL,
+  `data_nascimento` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -60,12 +60,12 @@ CREATE TABLE `customers` (
 --
 
 CREATE TABLE `loans` (
-  `id` bigint(20) NOT NULL,
-  `customer_id` bigint(20) DEFAULT NULL,
-  `book_id` bigint(20) DEFAULT NULL,
-  `loan_date` date NOT NULL,
-  `return_date` date DEFAULT NULL,
-  `status` enum('BORROWED','AVAILABLE') NOT NULL DEFAULT 'BORROWED'
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `book_id` int(11) DEFAULT NULL,
+  `data_emprestimo` date NOT NULL,
+  `data_devolucao` date DEFAULT NULL,
+  `status` enum('EMPRESTADO','DISPONIVEL') NOT NULL DEFAULT 'EMPRESTADO'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -101,19 +101,19 @@ ALTER TABLE `loans`
 -- AUTO_INCREMENT de tabela `books`
 --
 ALTER TABLE `books`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `loans`
 --
 ALTER TABLE `loans`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restrições para despejos de tabelas
