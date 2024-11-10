@@ -12,20 +12,20 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
 @Entity
-@Table(name = "books")
+@Table(name = "books") 
 public class Book {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
-    private String author;
-    private String isbn;
-    private LocalDate publishedDate;
+    private String titulo; 
+    private String autor; 
+    private String isbn; 
+    private LocalDate dataPublicacao; 
 
     @Enumerated(EnumType.STRING)
-    private BookStatus status = BookStatus.AVAILABLE;
+    private StatusLivro status; 
 
     // Getters e Setters
 
@@ -37,20 +37,20 @@ public class Book {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getTitulo() {
+        return titulo;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getAutor() {
+        return autor;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setAutor(String autor) {
+        this.autor = autor;
     }
 
     public String getIsbn() {
@@ -61,36 +61,24 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public LocalDate getPublishedDate() {
-        return publishedDate;
+    public LocalDate getDataPublicacao() {
+        return dataPublicacao;
     }
 
-    public void setPublishedDate(LocalDate publishedDate) {
-        this.publishedDate = publishedDate;
+    public void setDataPublicacao(LocalDate dataPublicacao) {
+        this.dataPublicacao = dataPublicacao;
     }
 
-    public BookStatus getStatus() {
+    public StatusLivro getStatus() {
         return status;
     }
 
-    public void setStatus(BookStatus status) {
+    public void setStatus(StatusLivro status) {
         this.status = status;
     }
 
-    // hashCode e equals para comparação de objetos
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, isbn);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-        Book other = (Book) obj;
-        return Objects.equals(id, other.id) && Objects.equals(isbn, other.isbn);
+    public enum StatusLivro {
+        DISPONIVEL, EMPRESTADO 
     }
 }

@@ -1,117 +1,122 @@
 package com.api.biblioteca.model;
 
 import java.time.LocalDate;
-import java.util.Objects;
-
-import jakarta.persistence.Entity; 
+import java.util.List;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;  
+import jakarta.persistence.Table;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.CascadeType;
 
 @Entity
-@Table(name = "customers") 
+@Table(name = "customers")
 public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String lastname;
-    private String address;
-    private String city;
-    private String state;
-    private String country;
-    private LocalDate birthDate;
-    private Boolean isActive = true;
+    private String nome;
+    private String sobrenome;
+    private String endereco;
+    private String cidade;
+    private String estado;
+    private String pais;
+    private LocalDate dataNascimento;
+
+    @Enumerated(EnumType.STRING)
+    private StatusCliente status;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Loan> emprestimos; 
 
     // Getters e Setters
 
-    public String getName() {
-        return name;
+    public Long getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getNome() {
+        return nome;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public String getAddress() {
-        return address;
+    public String getSobrenome() {
+        return sobrenome;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setSobrenome(String sobrenome) {
+        this.sobrenome = sobrenome;
     }
 
-    public String getCity() {
-        return city;
+    public String getEndereco() {
+        return endereco;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
     }
 
-    public String getState() {
-        return state;
+    public String getCidade() {
+        return cidade;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
     }
 
-    public String getCountry() {
-        return country;
+    public String getEstado() {
+        return estado;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
-    public LocalDate getBirthDate() {
-        return birthDate;
+    public String getPais() {
+        return pais;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
+    public void setPais(String pais) {
+        this.pais = pais;
     }
 
-    public Boolean getIsActive() {
-        return isActive;
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
     }
 
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 79 * hash + Objects.hashCode(this.id);
-        return hash;
+    public StatusCliente getStatus() {
+        return status;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Customer other = (Customer) obj;
-        return Objects.equals(this.id, other.id);
+    public void setStatus(StatusCliente status) {
+        this.status = status;
+    }
+
+    public List<Loan> getEmprestimos() {
+        return emprestimos;
+    }
+
+    public void setEmprestimos(List<Loan> emprestimos) {
+        this.emprestimos = emprestimos;
+    }
+
+    public enum StatusCliente {
+        ATIVO, INATIVO
     }
 }

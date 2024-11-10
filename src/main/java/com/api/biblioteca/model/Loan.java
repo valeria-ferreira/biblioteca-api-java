@@ -1,31 +1,46 @@
 package com.api.biblioteca.model;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
+
 @Entity
-@Table(name = "loans") 
+@Table(name = "loans")
 public class Loan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    
     @ManyToOne
-    private Customer customer;
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer cliente;
 
+    
     @ManyToMany
-    private List<Book> books;
+    @JoinTable(
+      name = "loan_books", 
+      joinColumns = @JoinColumn(name = "loan_id"), 
+      inverseJoinColumns = @JoinColumn(name = "book_id"))
+    private List<Book> livros;
 
-    private Boolean extended = false;
+    private LocalDate dataEmprestimo;
+    private LocalDate dataDevolucao;
+
+    @Enumerated(EnumType.STRING)
+    private StatusEmprestimo status;
 
     // Getters e Setters
 
@@ -37,49 +52,62 @@ public class Loan {
         this.id = id;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public Customer getCliente() {
+        return cliente;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCliente(Customer cliente) {
+        this.cliente = cliente;
     }
 
-    public List<Book> getBooks() {
-        return books;
+    public List<Book> getLivros() {
+        return livros;
     }
 
-    public void setBooks(List<Book> books) {
-        this.books = books;
+    public void setLivros(List<Book> livros) {
+        this.livros = livros;
     }
 
-    public Boolean getExtended() {
-        return extended;
+    public LocalDate getDataEmprestimo() {
+        return dataEmprestimo;
     }
 
-    public void setExtended(Boolean extended) {
-        this.extended = extended;
+    public void setDataEmprestimo(LocalDate dataEmprestimo) {
+        this.dataEmprestimo = dataEmprestimo;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 83 * hash + Objects.hashCode(this.id);
-        return hash;
+    public LocalDate getDataDevolucao() {
+        return dataDevolucao;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
+    public void setDataDevolucao(LocalDate dataDevolucao) {
+        this.dataDevolucao = dataDevolucao;
+    }
+
+    public StatusEmprestimo getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusEmprestimo status) {
+        this.status = status;
+    }
+
+
+    public enum StatusEmprestimo {
+        EMPRESTADO, DISPONIVEL, ATRASADO, PRORROGADO
+    }
+    
+    // Método para verificar se o empréstimo está atrasado
+    public boolean isAtrasado() {
+        return LocalDate.now().isAfter(dataDevolucao) && status == StatusEmprestimo.EMPRESTADO;
+    }
+    
+    // Método para atualizar o status do empréstimo
+    public void atualizarStatus() {
+        if (isAtrasado()) {
+            this.status = StatusEmprestimo.ATRASADO;
+        } else if (dataDevolucao.isAfter(LocalDate.now()) && status == StatusEmprestimo.EMPRESTADO) {
+            this.status = StatusEmprestimo.PRORROGADO;
         }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Loan other = (Loan) obj;
-        return Objects.equals(this.id, other.id);
     }
 }
