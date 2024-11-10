@@ -1,58 +1,77 @@
 package com.api.biblioteca.controller;
 
 import com.api.biblioteca.model.Book;
+import com.api.biblioteca.service.BookService;
 import com.api.biblioteca.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/books")
+@RequestMapping("/api/books")
 public class BookController {
 
-    @Autowired
-    private BookRepository bookRepository;
+  @Autowired
+  private BookService bookService;
 
-    @GetMapping
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
-    }
+  // Obter todos os livros
+  @GetMapping
+  public ResponseEntity<List<Book>> getAllBooks() {
+    List<Book> books = bookService.findAll();
+    return books.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).build() : ResponseEntity.ok(books);
+  }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable Long id) {
-        return bookRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+  // Obter um livro por ID
+  @GetMapping("/{id}")
+  public ResponseEntity<Book> getBookById(@PathVariable Long id) {
+    Optional<Book> book = bookService.findById(id);
+    return book.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+  }
 
-    @PostMapping
-    public Book createBook(@RequestBody Book book) {
-        return bookRepository.save(book);
-    }
+  // Criar um novo livro
+  @PostMapping
+  public ResponseEntity<Book> createBook(@RequestBody Book book) {
+    Book createdBook = bookService.save(book);
+    return ResponseEntity.status(HttpStatus.CREATED).body(createdBook);
+  }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book bookDetails) {
-        return bookRepository.findById(id)
-                .map(book -> {
-                    book.setTitle(bookDetails.getTitle());
-                    book.setAuthor(bookDetails.getAuthor());
-                    book.setIsbn(bookDetails.getIsbn());
-                    book.setPublishedDate(bookDetails.getPublishedDate());
-                    book.setStatus(bookDetails.getStatus());
-                    return ResponseEntity.ok(bookRepository.save(book));
-                })
-                .orElse(ResponseEntity.notFound().build());
+  // Inativar um livro
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
+    Optional<Book> book = bookService.findById(id);
+    if (book.isPresent()) {
+      bookService.delete(id);
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+  }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
-        return bookRepository.findById(id)
-                .map(book -> {
-                    bookRepository.delete(book);
-                    return ResponseEntity.noContent().<Void>build(); // Aqui estamos forçando o tipo Void explicitamente
-                })
-                .orElse(ResponseEntity.notFound().build());
+  // Atualizar dados do livro (exceto status)
+  @PutMapping("/{id}")
+  public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book book) {
+    Optional<Book> existingBook = bookService.findById(id);
+    if (existingBook.isPresent()) {
+      book.setId(id); // garantindo que o ID do livro será mantido
+      Book updatedBook = bookService.save(book);
+      return ResponseEntity.ok(updatedBook);
     }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+  }
+
+  // Atualizar o status do livro
+  @PatchMapping("/{id}/status")
+  public ResponseEntity<Book> updateBookStatus(@PathVariable Long id, @RequestBody Book.StatusLivro status) {
+    Optional<Book> book = bookService.findById(id);
+    if (book.isPresent()) {
+      Book existingBook = book.get();
+      existingBook.setStatus(status);
+      Book updatedBook = bookService.save(existingBook);
+      return ResponseEntity.ok(updatedBook);
+    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+  }
 }
