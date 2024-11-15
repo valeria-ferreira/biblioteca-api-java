@@ -26,10 +26,10 @@ public class CustomerService {
     }
 
     // Alteração no método para receber LocalDate em vez de String
-    public List<Customer> findByBirthDate(String dataNascimento) {
+    public List<Customer> findByDataNascimento(String dataNascimento) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate date = LocalDate.parse(dataNascimento, formatter);
-        return customerRepository.findByBirthDate(date);
+        return customerRepository.findByDataNascimento(date);
     }
 
     public Customer save(Customer customer) {
