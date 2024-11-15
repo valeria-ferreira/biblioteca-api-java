@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     List<Customer> findByName(String name);
-    List<Customer> findByBirthDate(LocalDate birthDate);
+    List<Customer> findByBirthDate(LocalDate dataNascimento);
 }

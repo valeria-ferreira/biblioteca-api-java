@@ -42,8 +42,8 @@ public class CustomerController {
 
     // Encontrar cliente pela data de nascimento
     @GetMapping("/birthdate/{birthDate}")
-    public ResponseEntity<List<Customer>> findCustomerByBirthDate(@PathVariable String birthDate) {
-        List<Customer> customers = customerService.findByBirthDate(birthDate);
+    public ResponseEntity<List<Customer>> findCustomerByBirthDate(@PathVariable String dataNascimento) {
+        List<Customer> customers = customerService.findByBirthDate(dataNascimento);
         return customers.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).build()
                 : ResponseEntity.ok(customers);
     }
