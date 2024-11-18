@@ -2,7 +2,6 @@ package com.api.biblioteca.controller;
 
 import com.api.biblioteca.model.Book;
 import com.api.biblioteca.service.BookService;
-import com.api.biblioteca.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

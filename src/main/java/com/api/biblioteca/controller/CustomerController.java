@@ -3,7 +3,6 @@ package com.api.biblioteca.controller;
 import com.api.biblioteca.model.Customer;
 import com.api.biblioteca.model.Loan;
 import com.api.biblioteca.service.CustomerService;
-import com.api.biblioteca.repository.CustomerRepository;
 import com.api.biblioteca.service.LoanService;
 
 import org.springframework.beans.factory.annotation.Autowired;

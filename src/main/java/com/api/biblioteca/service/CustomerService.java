@@ -21,8 +21,8 @@ public class CustomerService {
         return customerRepository.findById(id);
     }
 
-    public List<Customer> findByName(String name) {
-        return customerRepository.findByName(name);
+    public List<Customer> findByName(String nome) {
+        return customerRepository.findByNome(nome);
     }
 
     // Alteração no método para receber LocalDate em vez de String

@@ -14,7 +14,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
-
 @Entity
 @Table(name = "loans")
 public class Loan {
@@ -23,18 +22,16 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    private Customer cliente;
+    private Customer cliente; // Relacionamento com Customer
 
-    
     @ManyToMany
     @JoinTable(
       name = "loan_books", 
       joinColumns = @JoinColumn(name = "loan_id"), 
       inverseJoinColumns = @JoinColumn(name = "book_id"))
-    private List<Book> livros;
+    private List<Book> livros; // Relacionamento com a tabela de associação "loan_books"
 
     private LocalDate dataEmprestimo;
     private LocalDate dataDevolucao;
@@ -91,7 +88,6 @@ public class Loan {
     public void setStatus(StatusEmprestimo status) {
         this.status = status;
     }
-
 
     public enum StatusEmprestimo {
         EMPRESTADO, DISPONIVEL, ATRASADO, PRORROGADO

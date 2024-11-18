@@ -1,31 +1,37 @@
 package com.api.biblioteca.model;
 
-import java.time.LocalDate;
-import java.util.Objects;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
+import java.util.List;
 
 @Entity
-@Table(name = "books") 
+@Table(name = "books")
 public class Book {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String titulo; 
-    private String autor; 
-    private String isbn; 
-    private LocalDate dataPublicacao; 
+    private String titulo;
+    private String isbn;
 
     @Enumerated(EnumType.STRING)
-    private StatusLivro status; 
+    private StatusLivro status;
+
+    @ManyToMany
+    @JoinTable(
+      name = "loan_books", 
+      joinColumns = @JoinColumn(name = "book_id"), 
+      inverseJoinColumns = @JoinColumn(name = "loan_id"))
+    private List<Loan> loans;  // Relacionamento ManyToMany com a entidade Loan
 
     // Getters e Setters
 
@@ -45,28 +51,12 @@ public class Book {
         this.titulo = titulo;
     }
 
-    public String getAutor() {
-        return autor;
-    }
-
-    public void setAutor(String autor) {
-        this.autor = autor;
-    }
-
     public String getIsbn() {
         return isbn;
     }
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
-    }
-
-    public LocalDate getDataPublicacao() {
-        return dataPublicacao;
-    }
-
-    public void setDataPublicacao(LocalDate dataPublicacao) {
-        this.dataPublicacao = dataPublicacao;
     }
 
     public StatusLivro getStatus() {
@@ -77,8 +67,15 @@ public class Book {
         this.status = status;
     }
 
+    public List<Loan> getLoans() {
+        return loans;
+    }
+
+    public void setLoans(List<Loan> loans) {
+        this.loans = loans;
+    }
 
     public enum StatusLivro {
-        DISPONIVEL, EMPRESTADO 
+        DISPONIVEL, EMPRESTADO, RESERVADO
     }
 }
