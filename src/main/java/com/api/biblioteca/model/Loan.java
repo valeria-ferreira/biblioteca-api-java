@@ -2,6 +2,9 @@ package com.api.biblioteca.model;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,6 +27,7 @@ public class Loan {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
+    @JsonBackReference  // Evita loop recursivo na serialização
     private Customer cliente; // Relacionamento com Customer
 
     @ManyToMany

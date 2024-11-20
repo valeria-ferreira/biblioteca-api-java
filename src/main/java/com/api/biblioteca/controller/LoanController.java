@@ -26,7 +26,7 @@ public class LoanController {
     private LoanService loanService;
 
     // Obter todos os empréstimos
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<Loan>> getAllLoans() {
         List<Loan> loans = loanService.findAll();
         return loans.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).build() : ResponseEntity.ok(loans);
@@ -49,15 +49,23 @@ public class LoanController {
     // Criar um novo empréstimo
     @PostMapping
     public ResponseEntity<Loan> createLoan(@RequestBody Loan loan) {
-        // verificando se o cliente já tem um empréstimo ativo
+        // Verificando se o cliente já tem um empréstimo ativo
         if (loanService.checkExistingLoan(loan.getCliente().getId())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(null); // se cliente já tem um empréstimo ativo
+                    .body(null); // Cliente já tem um empréstimo ativo
         }
+    
+        // Verificando se o cliente está tentando pegar mais de dois livros
+        if (loan.getLivros().size() > 2) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(null); // Cliente não pode pegar mais de dois livros
+        }
+    
+        // Criar o empréstimo
         Loan createdLoan = loanService.save(loan);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdLoan);
     }
-
+    
     // Finalizar o empréstimo
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLoan(@PathVariable Long id) {

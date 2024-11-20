@@ -1,14 +1,23 @@
 package com.api.biblioteca.controller;
 
-import com.api.biblioteca.model.Book;
-import com.api.biblioteca.service.BookService;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
+import com.api.biblioteca.model.Book;
+import com.api.biblioteca.service.BookService;
 
 @RestController
 @RequestMapping("/api/books")
@@ -18,7 +27,7 @@ public class BookController {
   private BookService bookService;
 
   // Obter todos os livros
-  @GetMapping
+  @GetMapping("/")
   public ResponseEntity<List<Book>> getAllBooks() {
     List<Book> books = bookService.findAll();
     return books.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).build() : ResponseEntity.ok(books);
@@ -37,6 +46,7 @@ public class BookController {
     Book createdBook = bookService.save(book);
     return ResponseEntity.status(HttpStatus.CREATED).body(createdBook);
   }
+  
 
   // Inativar um livro
   @DeleteMapping("/{id}")

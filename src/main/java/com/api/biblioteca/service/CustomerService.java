@@ -26,11 +26,14 @@ public class CustomerService {
     }
 
     // Alteração no método para receber LocalDate em vez de String
-    public List<Customer> findByDataNascimento(String dataNascimento) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate date = LocalDate.parse(dataNascimento, formatter);
-        return customerRepository.findByDataNascimento(date);
+    public List<Customer> findByDataNascimento(String birthDate) {
+        // O formato padrão ISO 8601 (yyyy-MM-dd) é aceito diretamente
+        LocalDate date = LocalDate.parse(birthDate);  // Converte a string para LocalDate
+        return customerRepository.findByDataNascimento(date);  // Passa o LocalDate para a consulta
     }
+    
+    
+    
 
     public Customer save(Customer customer) {
         return customerRepository.save(customer);

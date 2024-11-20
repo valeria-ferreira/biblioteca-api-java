@@ -1,16 +1,17 @@
 package com.api.biblioteca.model;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import java.util.List;
 
 @Entity
 @Table(name = "books")
@@ -22,6 +23,7 @@ public class Book {
 
     private String titulo;
     private String isbn;
+    private String autor;
 
     @Enumerated(EnumType.STRING)
     private StatusLivro status;
@@ -34,7 +36,7 @@ public class Book {
     private List<Loan> loans;  // Relacionamento ManyToMany com a entidade Loan
 
     // Getters e Setters
-
+    
     public Long getId() {
         return id;
     }
@@ -73,6 +75,14 @@ public class Book {
 
     public void setLoans(List<Loan> loans) {
         this.loans = loans;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
     }
 
     public enum StatusLivro {

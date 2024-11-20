@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,12 +41,12 @@ public class CustomerController {
     }
 
     // Encontrar cliente pela data de nascimento
-    @GetMapping("/birthdate/{birthDate}")
+    @GetMapping("/birthdate/{dataNascimento}")
     public ResponseEntity<List<Customer>> findCustomerByDataNascimento(@PathVariable String dataNascimento) {
-        List<Customer> customers = customerService.findByDataNascimento(dataNascimento);
-        return customers.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).build()
-                : ResponseEntity.ok(customers);
-    }
+    List<Customer> customers = customerService.findByDataNascimento(dataNascimento);
+    return customers.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+            : ResponseEntity.ok(customers);
+}
 
     // Encontrar empréstimos de um cliente pelo ID
     @GetMapping("/{id}/loans")
