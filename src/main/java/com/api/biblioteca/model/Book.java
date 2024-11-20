@@ -2,6 +2,7 @@ package com.api.biblioteca.model;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -19,15 +20,24 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "ID do livro")
     private Long id;
 
+    @Schema(description = "Título do livro")
     private String titulo;
+
+    @Schema(description = "ISBN do livro")
     private String isbn;
+
+    @Schema(description = "Autor do livro")
     private String autor;
 
     @Enumerated(EnumType.STRING)
+    @Schema(description = "Status do livro")
     private StatusLivro status;
 
+    // Remover ou esconder o relacionamento ManyToMany com a entidade Loan no Swagger
+    @Schema(hidden = true) // Esconde o campo 'loans' para não aparecer no Swagger
     @ManyToMany
     @JoinTable(
       name = "loan_books", 
@@ -36,7 +46,7 @@ public class Book {
     private List<Loan> loans;  // Relacionamento ManyToMany com a entidade Loan
 
     // Getters e Setters
-    
+
     public Long getId() {
         return id;
     }
