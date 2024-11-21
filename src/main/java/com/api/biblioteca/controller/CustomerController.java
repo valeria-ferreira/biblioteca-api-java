@@ -1,5 +1,6 @@
 package com.api.biblioteca.controller;
 
+import com.api.biblioteca.model.Book;
 import com.api.biblioteca.model.Customer;
 import com.api.biblioteca.model.Loan;
 import com.api.biblioteca.service.CustomerService;
@@ -22,6 +23,13 @@ public class CustomerController {
 
     @Autowired
     private LoanService loanService;
+
+
+    @GetMapping({"", "/"})
+  public ResponseEntity<List<Customer>> getAllCustomers() {
+    List<Customer> customers = customerService.findAll();
+    return customers.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).build() : ResponseEntity.ok(customers);
+  }
 
     // Encontrar cliente por ID
     @GetMapping("/{id}")

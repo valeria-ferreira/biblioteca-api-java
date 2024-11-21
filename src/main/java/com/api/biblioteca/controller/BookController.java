@@ -27,7 +27,7 @@ public class BookController {
   private BookService bookService;
 
   // Obter todos os livros
-  @GetMapping("/")
+  @GetMapping({"", "/"})
   public ResponseEntity<List<Book>> getAllBooks() {
     List<Book> books = bookService.findAll();
     return books.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).build() : ResponseEntity.ok(books);

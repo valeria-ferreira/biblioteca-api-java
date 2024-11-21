@@ -1,6 +1,8 @@
 package com.api.biblioteca.service;
 
+import com.api.biblioteca.model.Book;
 import com.api.biblioteca.model.Customer;
+import com.api.biblioteca.model.Loan;
 import com.api.biblioteca.repository.CustomerRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,11 @@ public class CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    public List<Customer> findAll() {
+    return customerRepository.findAll();
+  }
+
 
     public Optional<Customer> findById(Long id) {
         return customerRepository.findById(id);
