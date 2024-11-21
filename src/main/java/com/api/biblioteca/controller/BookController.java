@@ -27,7 +27,7 @@ public class BookController {
   private BookService bookService;
 
   // Obter todos os livros
-  @GetMapping({"", "/"})
+  @GetMapping({"/"})
   public ResponseEntity<List<Book>> getAllBooks() {
     List<Book> books = bookService.findAll();
     return books.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).build() : ResponseEntity.ok(books);
@@ -37,9 +37,13 @@ public class BookController {
   @GetMapping("/{id}")
   public ResponseEntity<Book> getBookById(@PathVariable Long id) {
     Optional<Book> book = bookService.findById(id);
-    return book.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-  }
-
+    if (book.isPresent()) {
+      // Escondendo o campo 'loans' na serialização para evitar o loop
+      book.get().setLoans(null);  // ou usar @JsonIgnore no campo 'loans'
+      return ResponseEntity.ok(book.get());
+    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+}
   // Criar um novo livro
   @PostMapping
   public ResponseEntity<Book> createBook(@RequestBody Book book) {

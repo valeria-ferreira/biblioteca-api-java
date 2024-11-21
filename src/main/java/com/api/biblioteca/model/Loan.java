@@ -6,15 +6,17 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
@@ -96,12 +98,12 @@ public class Loan {
     public enum StatusEmprestimo {
         EMPRESTADO, DISPONIVEL, ATRASADO, PRORROGADO
     }
-    
+
     // Método para verificar se o empréstimo está atrasado
     public boolean isAtrasado() {
         return LocalDate.now().isAfter(dataDevolucao) && status == StatusEmprestimo.EMPRESTADO;
     }
-    
+
     // Método para atualizar o status do empréstimo
     public void atualizarStatus() {
         if (isAtrasado()) {
@@ -109,5 +111,12 @@ public class Loan {
         } else if (dataDevolucao.isAfter(LocalDate.now()) && status == StatusEmprestimo.EMPRESTADO) {
             this.status = StatusEmprestimo.PRORROGADO;
         }
+    }
+
+    // Atualiza o status antes de persistir ou atualizar o empréstimo
+    @PrePersist
+    @PreUpdate
+    public void prePersistUpdate() {
+        atualizarStatus();
     }
 }

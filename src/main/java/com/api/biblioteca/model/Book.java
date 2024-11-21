@@ -2,6 +2,9 @@ package com.api.biblioteca.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,7 +23,7 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(description = "ID do livro")
+    @Schema(hidden = true)
     private Long id;
 
     @Schema(description = "Título do livro")
@@ -36,13 +39,15 @@ public class Book {
     @Schema(description = "Status do livro")
     private StatusLivro status;
 
-    // Remover ou esconder o relacionamento ManyToMany com a entidade Loan no Swagger
+    // Relacionamento ManyToMany com a entidade Loan
+    @JsonManagedReference
     @Schema(hidden = true) // Esconde o campo 'loans' para não aparecer no Swagger
     @ManyToMany
     @JoinTable(
       name = "loan_books", 
       joinColumns = @JoinColumn(name = "book_id"), 
       inverseJoinColumns = @JoinColumn(name = "loan_id"))
+    @JsonIgnore
     private List<Loan> loans;  // Relacionamento ManyToMany com a entidade Loan
 
     // Getters e Setters
